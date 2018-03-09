@@ -1,0 +1,5 @@
+name id
+str int
+sonu 1
+akil 2
+badri 3
