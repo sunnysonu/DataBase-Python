@@ -47,11 +47,19 @@ def ImplementOperations(parameters):
         return True
 
     elif(parameters["operation"] == "insert"):
-        operations.insert(parameters["parameter1"])
+        try:
+            operations.insert(parameters["parameter1"])
+        except FileNotFoundError:
+            print("No such table found")
         return True
 
     elif(parameters["operation"] == "select"):
-        operations.Select(parameters)
+        try:
+            operations.Select(parameters)
+        except KeyError:
+            print("No such column found")
+        except FileNotFoundError:
+            print("No such table found")
         return True
 
     elif(parameters["operation"] == "exit"):
@@ -62,7 +70,12 @@ def ImplementOperations(parameters):
         return True
 
     elif(parameters["operation"] == "join"):
-        operations.join(parameters)
+        try:
+            operations.join(parameters)
+        except FileNotFoundError:
+            print("No such table found")
+        except IndexError:
+            print("No common fields")
         return True
 
 

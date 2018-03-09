@@ -20,6 +20,8 @@ def Select(parameters):
 
     InputOutput.DisplayRequestedData(requested_data, columns)
 
+# Returns the requested Data after evaluating special conditions.
+
 def GetRequestedDataAfterEvaluatingSpecialConditions(requested_data, expressions, table_name):
     updated_requested_data =[]
     data = ReadDataFromTable(table_name)
@@ -51,6 +53,7 @@ def GetRequestedDataAfterEvaluatingSpecialConditions(requested_data, expressions
 
     return updated_requested_data
 
+# Returns special conditions.
 
 def GetSpecialConditions(parameters):
     special_conditions = parameters["parameter3"].split(",")
@@ -97,6 +100,7 @@ def join(parameters):
 
     InputOutput.DisplayRequestedData(data, columns)
 
+# Retuns Requested columns data
 
 def GetRequestedData(parameters, table_name):
 
@@ -115,10 +119,13 @@ def GetRequestedData(parameters, table_name):
 
     return requested_data
 
+# Returns number of row in a table.
+
 def GetNumberOfRows(data):
     value = list(data.values())
     return len(value[0])
 
+# Returns list of columns requested.
 
 def GetRequiredColumns(table_name, required_columns):
 
@@ -129,6 +136,7 @@ def GetRequiredColumns(table_name, required_columns):
 
     return required_columns
 
+# Returns dict with keys as column names
 
 def GetDataIntoDic(table_name):
     data = {}
@@ -142,6 +150,7 @@ def GetDataIntoDic(table_name):
 
     return data
 
+# Returns the rows form the table
 
 def ReadDataFromTable(table_name):
     f = open(table_name + ".txt", "r")
@@ -155,7 +164,6 @@ def ReadDataFromTable(table_name):
 
     f.close()
     return lines[2 : ]
-
 
 def insert(table_name):
     field_names = GetFieldNamesFromFile(table_name)
@@ -172,6 +180,7 @@ def insert(table_name):
     f.write(" ".join(str(data) for data in row) + "\n")
     f.close()
 
+# Returns the list of column or field names.
 
 def GetFieldNamesFromFile(table_name):
     f = open(table_name + ".txt", "r")
@@ -183,6 +192,7 @@ def GetFieldNamesFromFile(table_name):
 
     return field_names
 
+# Returns list of types of column names.
 
 def GetDatatypesFromFile(table_name):
     f = open(table_name + ".txt", "r")
