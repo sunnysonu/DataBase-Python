@@ -133,7 +133,6 @@ def GetRequiredColumns(table_name, required_columns):
         required_columns = GetFieldNamesFromFile(table_name)
     else:
         required_columns = required_columns.split(",")
-
     return required_columns
 
 # Returns dict with keys as column names
@@ -147,7 +146,6 @@ def GetDataIntoDic(table_name):
         for row in list_of_rows:
             data.setdefault(field_names[index], [])
             data[field_names[index]].append(row[index])
-
     return data
 
 # Returns the rows form the table

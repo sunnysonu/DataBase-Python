@@ -88,6 +88,5 @@ def GetFieldNamesAndDatatypes(fields):
         field_names.append(field[0])
         data_types.append(field[1])
 
-    print(field_names, data_types)
     return field_names, data_types
 

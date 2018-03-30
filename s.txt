@@ -1,0 +1,5 @@
+id name percent
+int str int
+1 praharsh 90
+2 chandan 90
+3 ujwal 90
