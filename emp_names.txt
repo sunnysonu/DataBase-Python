@@ -1,4 +1,0 @@
-id name
-int str
-1 xyz
-2 pqr

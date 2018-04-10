@@ -1,9 +1,9 @@
 import InputOutput
 
 def CreateTable(table_name, field_names, data_types):
-    f = open(table_name + ".txt", "w")
-    f.write(" ".join(name for name in field_names) + "\n")
-    f.write(" ".join(type for type in data_types) + "\n")
+    f = open(table_name + ".csv", "w")
+    f.write(",".join(name for name in field_names) + "\n")
+    f.write(",".join(type for type in data_types) + "\n")
     f.close()
 
 
@@ -151,14 +151,14 @@ def GetDataIntoDic(table_name):
 # Returns the rows form the table
 
 def ReadDataFromTable(table_name):
-    f = open(table_name + ".txt", "r")
+    f = open(table_name + ".csv", "r")
     lines = []
 
     while(True):
         line = f.readline()
         if not line:
             break
-        lines.append(line.strip().split(" "))
+        lines.append(line.strip().split(","))
 
     f.close()
     return lines[2 : ]
@@ -174,32 +174,32 @@ def insert(table_name):
         row.append(InputOutput.TakeFieldInput(field_names[index], data_types[index]))
         index += 1
 
-    f = open(table_name + ".txt", "a")
-    f.write(" ".join(str(data) for data in row) + "\n")
+    f = open(table_name + ".csv", "a")
+    f.write(",".join(str(data) for data in row) + "\n")
     f.close()
 
 # Returns the list of column or field names.
 
 def GetFieldNamesFromFile(table_name):
-    f = open(table_name + ".txt", "r")
+    f = open(table_name + ".csv", "r")
     field_names = f.readline()
     f.close()
 
     field_names = field_names.strip()
-    field_names = field_names.split(" ")
+    field_names = field_names.split(",")
 
     return field_names
 
 # Returns list of types of column names.
 
 def GetDatatypesFromFile(table_name):
-    f = open(table_name + ".txt", "r")
+    f = open(table_name + ".csv", "r")
     field_names = f.readline()
     data_types = f.readline()
     f.close()
 
     data_types = data_types.strip()
-    data_types = data_types.split(" ")
+    data_types = data_types.split(",")
 
     return data_types
 

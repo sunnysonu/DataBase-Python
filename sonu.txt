@@ -1,4 +1,0 @@
-name id
-str int
-sonu 1
-akhil 2

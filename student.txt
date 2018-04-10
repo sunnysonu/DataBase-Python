@@ -1,6 +1,0 @@
-name roll_no marks percent
-str int int float
-sonu 1 90 90.0
-akhil 2 90 90.0
-vishu 3 90 90.0
-manoj 4 85 85.0
