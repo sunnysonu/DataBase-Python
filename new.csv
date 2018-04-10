@@ -1,0 +1,5 @@
+id,sex,name,dept,age
+int,str,str,str,int
+1,male,mouli,cse,0
+2,male,sonu,cse,20
+4,female,-,-,-

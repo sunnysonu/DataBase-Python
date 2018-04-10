@@ -3,7 +3,7 @@ import operations
 parse_string = {"create": ["create", "table", "parameter1", "parameter2"],
                 "insert": ["insert", "into", "parameter1"],
                 "select": ["select", "parameter1", "from", "parameter2", "where", "parameter3"],
-                "join": ["join", "parameter1", "parameter2"],
+                "join": ["join", "parameter1", "parameter2", "into", "parameter3"],
                 "exit": ["exit"],
                 "help" : ["help"]}
 

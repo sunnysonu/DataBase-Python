@@ -79,14 +79,20 @@ def GetSpecialConditions(parameters):
 def join(parameters):
     columns1 = GetRequiredColumns(parameters["parameter1"], "*")
     columns2 = GetRequiredColumns(parameters["parameter2"], "*")
-    common_columns = list(set(columns1) & set(columns2))
+    datatypes1 = GetDatatypesFromFile(parameters["parameter1"])
+    datatypes2 = GetDatatypesFromFile(parameters["parameter2"])
+    dict_of_datatypes = dict(zip(columns1 + columns2, datatypes1 + datatypes2))
 
-    dict1 = GetDataIntoDic(parameters["parameter1"])
-    dict2 = GetDataIntoDic(parameters["parameter2"])
+    common_columns = list(set(columns1) & set(columns2))
 
     for common_column in common_columns:
         columns2.pop(columns2.index(common_column))
     columns = columns1 + columns2
+
+    datatypes = [dict_of_datatypes[key] for key in columns]
+
+    dict1 = GetDataIntoDic(parameters["parameter1"])
+    dict2 = GetDataIntoDic(parameters["parameter2"])
 
     data = []
     for dict1_index in range(len(dict1[common_columns[0]])):
@@ -99,6 +105,10 @@ def join(parameters):
         data.append(row)
 
     InputOutput.DisplayRequestedData(data, columns)
+    CreateTable(parameters["parameter3"], columns, datatypes)
+    f = open(parameters["parameter3"] + ".csv", "a")
+    for row in data:
+        f.write(",".join(row) + "\n")
 
 # Retuns Requested columns data
 
