@@ -2,6 +2,8 @@ import InputOutput
 
 def CreateTable(table_name, field_names, data_types):
     f = open(table_name + ".csv", "w")
+    f.close()
+    f = open(table_name + "_helper.csv", "w")
     f.write(",".join(name for name in field_names) + "\n")
     f.write(",".join(type for type in data_types) + "\n")
     f.close()
@@ -88,7 +90,8 @@ def join(parameters):
     for common_column in common_columns:
         columns2.pop(columns2.index(common_column))
     columns = columns1 + columns2
-
+    print(datatypes1)
+    print(datatypes2)
     datatypes = [dict_of_datatypes[key] for key in columns]
 
     dict1 = GetDataIntoDic(parameters["parameter1"])
@@ -106,9 +109,7 @@ def join(parameters):
 
     InputOutput.DisplayRequestedData(data, columns)
     CreateTable(parameters["parameter3"], columns, datatypes)
-    f = open(parameters["parameter3"] + ".csv", "a")
-    for row in data:
-        f.write(",".join(row) + "\n")
+    InsertDataToFile(parameters["parameter3"], data, "w")
 
 # Retuns Requested columns data
 
@@ -171,7 +172,7 @@ def ReadDataFromTable(table_name):
         lines.append(line.strip().split(","))
 
     f.close()
-    return lines[2 : ]
+    return lines
 
 def insert(table_name):
     field_names = GetFieldNamesFromFile(table_name)
@@ -188,10 +189,56 @@ def insert(table_name):
     f.write(",".join(str(data) for data in row) + "\n")
     f.close()
 
+def sortby(parameters):
+    keys = parameters["parameter2"].split(",")
+    #dict_of_columns = dict(zip(GetFieldNamesFromFile(parameters["parameter1"]), GetDatatypesFromFile(parameters["parameter1"])))
+    columns = GetFieldNamesFromFile(parameters["parameter1"])
+    data = ReadDataFromTable(parameters["parameter1"])
+    for key in keys:
+        if(key[0] == "-"):
+            data.sort(key = lambda x : x[columns.index(key[1 : ])], reverse = True)
+        else:
+            data.sort(key = lambda x : x[columns.index(key)])
+
+    InputOutput.DisplayRequestedData(data, columns)
+    InsertDataToFile(parameters["parameter1"], data, "a")
+
+def find(parameters):
+    table_name = parameters["parameter3"]
+    requested_columns = parameters["parameter2"].split(",")
+    data = ReadDataFromTable(table_name)
+    operation = parameters["parameter1"]
+    if(operation == "sum"):
+        data = FindSum(table_name, data, requested_columns)
+        AddColumn(table_name, "total", "int")
+        InsertDataToFile(table_name, data, "w")
+    InputOutput.DisplayRequestedData(data, GetFieldNamesFromFile(table_name))
+
+def AddColumn(table_name, column_name, data_type):
+    column_names = GetFieldNamesFromFile(table_name)
+    data_types = GetDatatypesFromFile(table_name)
+    column_names.append(column_name)
+    data_types.append(data_type)
+
+    f = open(table_name + "_helper.csv", "w")
+    f.write(",".join(column_names) + "\n")
+    f.write(",".join(data_types) + "\n")
+    f.close()
+
+def FindSum(table_name, data, requested_columns):
+    columns = GetFieldNamesFromFile(table_name)
+    dict_of_columns = dict(zip(columns, range(len(columns))))
+    for index in range(len(data)):
+        sum = 0
+        for requested_column in requested_columns:
+            sum += int(data[index][dict_of_columns[requested_column]])
+        data[index].append(sum)
+    return data
+
 # Returns the list of column or field names.
 
 def GetFieldNamesFromFile(table_name):
-    f = open(table_name + ".csv", "r")
+    f = open(table_name + "_helper.csv", "r")
     field_names = f.readline()
     f.close()
 
@@ -203,7 +250,7 @@ def GetFieldNamesFromFile(table_name):
 # Returns list of types of column names.
 
 def GetDatatypesFromFile(table_name):
-    f = open(table_name + ".csv", "r")
+    f = open(table_name + "_helper.csv", "r")
     field_names = f.readline()
     data_types = f.readline()
     f.close()
@@ -212,6 +259,12 @@ def GetDatatypesFromFile(table_name):
     data_types = data_types.split(",")
 
     return data_types
+
+def InsertDataToFile(table_name, data, mode):
+    f = open(table_name + ".csv", mode)
+    for row in data:
+        f.write(",".join(str(x) for x in row) + "\n")
+    f.close()
 
 def PrintSyntaxes():
     print("Syntax")

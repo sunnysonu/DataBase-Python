@@ -1,5 +1,4 @@
-id,sex,name,dept,age
-int,str,str,str,int
-1,male,mouli,cse,0
-2,male,sonu,cse,20
-4,female,-,-,-
+1,sonu,cse,90,91
+2,akil,cse,90,92
+2,akil,cse,90,92
+1,sonu,cse,90,91

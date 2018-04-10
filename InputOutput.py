@@ -17,9 +17,9 @@ def TakeFieldInput(field_name, data_type):
 def PrintHeading(columns):
     column_name = ""
     for column in columns:
-        column_name += column + (" " * (20 - len(column)))
+        column_name += column + (" " * (40 - len(column)))
     DisplayRow(column_name)
-    print("-" * 20 * len(columns))
+    print("-" * 40 * len(columns))
 
 def DisplayRequestedData(requested_data, columns):
     PrintHeading(columns)
@@ -30,6 +30,6 @@ def DisplayRequestedData(requested_data, columns):
 def ConvertToSpaceSeparatedString(row):
     s = ""
     for word in row:
-        s += str(word) + (" " * (20 - len(word)))
+        s += str(word) + (" " * (40 - len(word)))
 
     return s

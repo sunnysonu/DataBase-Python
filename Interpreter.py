@@ -5,7 +5,9 @@ parse_string = {"create": ["create", "table", "parameter1", "parameter2"],
                 "select": ["select", "parameter1", "from", "parameter2", "where", "parameter3"],
                 "join": ["join", "parameter1", "parameter2", "into", "parameter3"],
                 "exit": ["exit"],
-                "help" : ["help"]}
+                "help" : ["help"],
+                "sort" : ["sort", "table", "parameter1", "by", "parameter2"],
+                "find" : ["find", "parameter1", "parameter2", "in", "parameter3"]}
 
 
 def SyntaxAnalyzer(query):
@@ -78,6 +80,13 @@ def ImplementOperations(parameters):
             print("No common fields")
         return True
 
+    elif(parameters["operation"] == "sort"):
+        operations.sortby(parameters)
+        return True
+
+    elif(parameters["operation"] == "find"):
+        operations.find(parameters)
+        return True
 
 def GetFieldNamesAndDatatypes(fields):
     fields = fields.split(",")
