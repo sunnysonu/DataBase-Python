@@ -8,7 +8,7 @@ parse_string = {"create": ["create", "table", "parameter1", "parameter2"],
                 "exit": ["exit"],
                 "help" : ["help"],
                 "sort" : ["sort", "table", "parameter1", "by", "parameter2"],
-                "find" : ["find", "parameter1", "parameter2", "in", "parameter3"],
+                "find" : ["find", "parameter1", "parameter2", "in", "parameter3", "as", "parameter4"],
                 "cls" : ["cls"],
                 "drop" : ["drop", "parameter1", "from", "parameter2"]}
 

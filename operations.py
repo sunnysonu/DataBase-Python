@@ -279,23 +279,17 @@ def find(parameters):
     table_name = parameters["parameter3"]
     requested_columns = parameters["parameter2"].split(",")
     data = ReadDataFromTable(table_name)
+    columns = GetFieldNamesFromFile(table_name)
+    data_types = GetDatatypesFromFile(table_name)
     operation = parameters["parameter1"]
     if(operation == "sum"):
         data = FindSum(table_name, data, requested_columns)
-        AddColumn(table_name, "total", "int")
+        columns.append(parameters["parameter4"])
+        data_types.append("int")
+        InsertDataToFile(table_name + "_helper", [columns], "w")
+        InsertDataToFile(table_name + "_helper", [data_types], "a")
         InsertDataToFile(table_name, data, "w")
     InputOutput.DisplayRequestedData(data, GetFieldNamesFromFile(table_name))
-
-def AddColumn(table_name, column_name, data_type):
-    column_names = GetFieldNamesFromFile(table_name)
-    data_types = GetDatatypesFromFile(table_name)
-    column_names.append(column_name)
-    data_types.append(data_type)
-
-    f = open(table_name + "_helper.csv", "w")
-    f.write(",".join(column_names) + "\n")
-    f.write(",".join(data_types) + "\n")
-    f.close()
 
 def FindSum(table_name, data, requested_columns):
     columns = GetFieldNamesFromFile(table_name)

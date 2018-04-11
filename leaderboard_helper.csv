@@ -1,2 +1,2 @@
-name,mail,college,github-id,gender,zone,C-Arrays,C-Arrays2,C-Basics,total
-str,str,str,str,str,str,int,int,int,int
+name,mail,college,github-id,gender,zone,C-Arrays,C-Arrays2,C-Basics,C-FunctionPointers,totalmarks
+str,str,str,str,str,str,int,int,int,int,int
