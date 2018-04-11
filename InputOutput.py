@@ -30,6 +30,6 @@ def DisplayRequestedData(requested_data, columns):
 def ConvertToSpaceSeparatedString(row):
     s = ""
     for word in row:
-        s += str(word) + (" " * (40 - len(word)))
+        s += str(word) + (" " * (40 - len(str(word))))
 
     return s

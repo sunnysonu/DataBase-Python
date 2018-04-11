@@ -104,7 +104,7 @@ def join(parameters):
             dict2_index = dict2[common_columns[0]].index(dict1[common_columns[0]][dict1_index])
             row += [dict2[x][dict2_index] for x in dict2 if x not in common_columns]
         else:
-            row += ["-"] * len(columns2)
+            row += ["0"] * len(columns2)
         data.append(row)
 
     InputOutput.DisplayRequestedData(data, columns)
@@ -191,17 +191,24 @@ def insert(table_name):
 
 def sortby(parameters):
     keys = parameters["parameter2"].split(",")
-    #dict_of_columns = dict(zip(GetFieldNamesFromFile(parameters["parameter1"]), GetDatatypesFromFile(parameters["parameter1"])))
+    dict_of_columns = dict(zip(GetFieldNamesFromFile(parameters["parameter1"]), GetDatatypesFromFile(parameters["parameter1"])))
     columns = GetFieldNamesFromFile(parameters["parameter1"])
     data = ReadDataFromTable(parameters["parameter1"])
     for key in keys:
         if(key[0] == "-"):
-            data.sort(key = lambda x : x[columns.index(key[1 : ])], reverse = True)
+            if(dict_of_columns[key[1 : ]] == "str"):
+                data.sort(key = lambda x : x[columns.index(key[1 : ])].lower(), reverse = True)
+            elif(dict_of_columns[key[1 : ]] == "int"):
+                data.sort(key=lambda x: int(x[columns.index(key[1:])]), reverse=True)
         else:
-            data.sort(key = lambda x : x[columns.index(key)])
+            if(dict_of_columns[key] == "str"):
+                data.sort(key = lambda x : x[columns.index(key)].lower())
+            if (dict_of_columns[key] == "int"):
+                data.sort(key=lambda x: int(x[columns.index(key)]))
+
 
     InputOutput.DisplayRequestedData(data, columns)
-    InsertDataToFile(parameters["parameter1"], data, "a")
+    InsertDataToFile(parameters["parameter1"], data, "w")
 
 def find(parameters):
     table_name = parameters["parameter3"]

@@ -1,2 +1,2 @@
-name,mail,college,github-id,gender,zone,C-Basics
-str,str,str,str,str,str,int
+name,mail,college,github-id,gender,zone,C-Basics,C-FunctionPointers,total
+str,str,str,str,str,str,int,int,int
