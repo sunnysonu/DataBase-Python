@@ -1,4 +1,5 @@
 import operations
+import os
 
 parse_string = {"create": ["create", "table", "parameter1", "parameter2"],
                 "insert": ["insert", "into", "parameter1"],
@@ -7,7 +8,9 @@ parse_string = {"create": ["create", "table", "parameter1", "parameter2"],
                 "exit": ["exit"],
                 "help" : ["help"],
                 "sort" : ["sort", "table", "parameter1", "by", "parameter2"],
-                "find" : ["find", "parameter1", "parameter2", "in", "parameter3"]}
+                "find" : ["find", "parameter1", "parameter2", "in", "parameter3"],
+                "cls" : ["cls"],
+                "drop" : ["drop", "parameter1", "from", "parameter2"]}
 
 
 def SyntaxAnalyzer(query):
@@ -53,6 +56,8 @@ def ImplementOperations(parameters):
             operations.insert(parameters["parameter1"])
         except FileNotFoundError:
             print("No such table found")
+        except PermissionError:
+            print("Please close the file", parameters["parameter1"])
         return True
 
     elif(parameters["operation"] == "select"):
@@ -81,11 +86,25 @@ def ImplementOperations(parameters):
         return True
 
     elif(parameters["operation"] == "sort"):
-        operations.sortby(parameters)
+        try:
+            operations.sortby(parameters)
+        except PermissionError:
+            print("Please close the file", parameters["parameter1"])
         return True
 
     elif(parameters["operation"] == "find"):
-        operations.find(parameters)
+        try:
+            operations.find(parameters)
+        except PermissionError:
+            print("Please close the file", parameters["parameter3"])
+        return True
+
+    elif(parameters["operation"] == "cls"):
+        os.system("cls")
+        return True
+
+    elif(parameters["operation"] == "drop"):
+        operations.drop(parameters)
         return True
 
 def GetFieldNamesAndDatatypes(fields):

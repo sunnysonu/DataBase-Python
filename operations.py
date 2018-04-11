@@ -27,29 +27,75 @@ def Select(parameters):
 def GetRequestedDataAfterEvaluatingSpecialConditions(requested_data, expressions, table_name):
     updated_requested_data =[]
     data = ReadDataFromTable(table_name)
+    data_types = GetDatatypesFromFile(table_name)
     for index, row in enumerate(data):
         is_row_satisfied = True
         for expression in expressions:
-            if(expression[2] == "="):
-                if(row[expression[0]] != expression[1]):
-                    is_row_satisfied = False
-                    break
-            if (expression[2] == "<"):
-                if (row[expression[0]] >= expression[1]):
-                    is_row_satisfied = False
-                    break
-            if (expression[2] == ">"):
-                if (row[expression[0]] <= expression[1]):
-                    is_row_satisfied = False
-                    break
-            if (expression[2] == "<="):
-                if (row[expression[0]] > expression[1]):
-                    is_row_satisfied = False
-                    break
-            if (expression[2] == ">="):
-                if (row[expression[0]] < expression[1]):
-                    is_row_satisfied = False
-                    break
+            if(data_types[expression[0]] == "str"):
+                if(expression[2] == "="):
+                    if(row[expression[0]].lower() != expression[1].lower()):
+                        is_row_satisfied = False
+                        break
+                if (expression[2] == "<"):
+                    if (row[expression[0]].lower() >= expression[1].lower()):
+                        is_row_satisfied = False
+                        break
+                if (expression[2] == ">"):
+                    if (row[expression[0]].lower() <= expression[1].lower()):
+                        is_row_satisfied = False
+                        break
+                if (expression[2] == "<="):
+                    if (row[expression[0]].lower() > expression[1].lower()):
+                        is_row_satisfied = False
+                        break
+                if (expression[2] == ">="):
+                    if (row[expression[0]].lower() < expression[1].lower()):
+                        is_row_satisfied = False
+                        break
+            elif(data_types[expression[0]] == "int"):
+                if (expression[2] == "="):
+                    if (int(row[expression[0]]) != int(expression[1])):
+                        is_row_satisfied = False
+                        break
+                if (expression[2] == "<"):
+                    if (int(row[expression[0]]) >= int(expression[1])):
+                        is_row_satisfied = False
+                        break
+                if (expression[2] == ">"):
+                    if (int(row[expression[0]]) <= int(expression[1])):
+                        is_row_satisfied = False
+                        break
+                if (expression[2] == "<="):
+                    if (int(row[expression[0]]) > int(expression[1])):
+                        is_row_satisfied = False
+                        break
+                if (expression[2] == ">="):
+                    if (int(row[expression[0]]) < int(expression[1])):
+                        is_row_satisfied = False
+                        break
+            elif(data_types[expression[0]] == "float"):
+                if (expression[2] == "="):
+                    if (float(row[expression[0]]) != float(expression[1])):
+                        is_row_satisfied = False
+                        break
+                    if (expression[2] == "<"):
+                        if (float(row[expression[0]]) >= float(expression[1])):
+                            is_row_satisfied = False
+                            break
+                    if (expression[2] == ">"):
+                        if (float(row[expression[0]]) <= float(expression[1])):
+                            is_row_satisfied = False
+                            break
+                    if (expression[2] == "<="):
+                        if (float(row[expression[0]]) > float(expression[1])):
+                            is_row_satisfied = False
+                            break
+                    if (expression[2] == ">="):
+                        if (float(row[expression[0]]) < float(expression[1])):
+                            is_row_satisfied = False
+                            break
+
+
         if(is_row_satisfied):
             updated_requested_data.append(requested_data[index])
 
@@ -194,7 +240,7 @@ def sortby(parameters):
     dict_of_columns = dict(zip(GetFieldNamesFromFile(parameters["parameter1"]), GetDatatypesFromFile(parameters["parameter1"])))
     columns = GetFieldNamesFromFile(parameters["parameter1"])
     data = ReadDataFromTable(parameters["parameter1"])
-    for key in keys:
+    for key in keys[: : -1]:
         if(key[0] == "-"):
             if(dict_of_columns[key[1 : ]] == "str"):
                 data.sort(key = lambda x : x[columns.index(key[1 : ])].lower(), reverse = True)
@@ -209,6 +255,25 @@ def sortby(parameters):
 
     InputOutput.DisplayRequestedData(data, columns)
     InsertDataToFile(parameters["parameter1"], data, "w")
+
+def drop(parameters):
+    columns = parameters["parameter1"].split(",")
+    table_name = parameters["parameter2"]
+    data = ReadDataFromTable(table_name)
+    data_types = GetDatatypesFromFile(table_name)
+    column_names = GetFieldNamesFromFile(table_name)
+
+    for column in columns:
+        index = column_names.index(column)
+        column_names.pop(index)
+        data_types.pop(index)
+        for row_index in range(len(data)):
+            data[row_index].pop(index)
+
+    InsertDataToFile(table_name + "_helper", [column_names], "w")
+    InsertDataToFile(table_name + "_helper", [data_types], "a")
+    InsertDataToFile(table_name, data, 'w')
+    InputOutput.DisplayRequestedData(data, column_names)
 
 def find(parameters):
     table_name = parameters["parameter3"]
